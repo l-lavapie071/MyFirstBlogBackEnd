@@ -1,37 +1,63 @@
-namespace MyFirstBlog.Services;
-
 using MyFirstBlog.Helpers;
 using MyFirstBlog.Entities;
-using System.Text.RegularExpressions;
 using MyFirstBlog.Dtos;
+using System.Text.RegularExpressions;
 
-public interface IPostService
+namespace MyFirstBlog.Services
 {
-    IEnumerable<PostDto> GetPosts();
-    PostDto GetPost(String slug);
-}
-
-public class PostService : IPostService
-{
-    private DataContext _context;
-
-    public PostService(DataContext context)
+    public interface IPostService
     {
-        _context = context;
+        IEnumerable<PostDto> GetPosts();
+        PostDto GetPost(string slug);
+        PostDto CreatePost(PostDto dto);
     }
 
-    public IEnumerable<PostDto> GetPosts()
+    public class PostService : IPostService
     {
-        return _context.Posts.Select(post => post.AsDto());
-    }
+        private readonly DataContext _context;
 
-    public PostDto GetPost(string slug)
-    {
-        return getPost(slug).AsDto();
-    }
+        public PostService(DataContext context)
+        {
+            _context = context;
+        }
 
-    private Post getPost(string slug)
-    {
-        return _context.Posts.Where(a=>a.Slug==slug.ToString()).SingleOrDefault();
+        public IEnumerable<PostDto> GetPosts()
+        {
+            return _context.Posts.Select(post => post.AsDto());
+        }
+
+        public PostDto GetPost(string slug)
+        {
+            var post = GetPostEntity(slug);
+            return post?.AsDto();
+        }
+
+        private Post? GetPostEntity(string slug)
+        {
+            return _context.Posts.SingleOrDefault(p => p.Slug == slug);
+        }
+
+        public PostDto CreatePost(PostDto dto)
+        {
+            var post = new Post
+            {
+                Title = dto.Title,
+                Slug = GenerateSlug(dto.Title),
+                Body = dto.Body,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            _context.Posts.Add(post);
+            _context.SaveChanges();
+
+            return post.AsDto();
+        }
+
+        private string GenerateSlug(string title)
+        {
+            var slug = Regex.Replace(title.ToLower(), @"[^a-z0-9\s-]", "");
+            slug = Regex.Replace(slug, @"\s+", "-").Trim('-');
+            return slug;
+        }
     }
 }

@@ -21,6 +21,32 @@
   },
   {
     "ContainingType": "MyFirstBlog.Controllers.PostsController",
+    "Method": "PostCreateDto",
+    "RelativePath": "posts",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "input",
+        "Type": "MyFirstBlog.Dtos.PostDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "MyFirstBlog.Dtos.PostDto",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "MyFirstBlog.Controllers.PostsController",
     "Method": "GetPost",
     "RelativePath": "posts/{slug}",
     "HttpMethod": "GET",

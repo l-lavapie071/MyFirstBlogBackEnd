@@ -1,9 +1,9 @@
 namespace MyFirstBlog.Dtos;
 
-public record PostDto {
-    public Guid Id { get; init; }
-    public string Title { get; init; } = default!;
-    public string Slug { get; init; } = default!;
-    public string Body { get; init; } = default!;
-    public DateTime CreatedDate { get; init; }
+public class PostDto
+{
+    public string Title { get; set; } = string.Empty;
+    public string Slug { get; set; } = string.Empty;
+    public string Body { get; set; } = string.Empty;
+    public DateTime CreatedDate { get; set; }
 }

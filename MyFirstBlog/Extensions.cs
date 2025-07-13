@@ -6,7 +6,7 @@ namespace MyFirstBlog {
         public static PostDto AsDto(this Post post) {
             return new PostDto
             {
-                Id = post.Id,
+                //Id = post.Id,
                 Title = post.Title,
                 Slug = post.Slug,
                 Body = post.Body,
